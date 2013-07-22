@@ -35,7 +35,8 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/main.o
+	${OBJECTDIR}/main.o \
+	${OBJECTDIR}/BrightnessControl.o
 
 
 # C Compiler Flags
@@ -52,7 +53,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=
+LDLIBSOPTIONS=-L/usr/lib/opencv `pkg-config --libs opencv`  
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
@@ -65,7 +66,12 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/pictureframecam: ${OBJECTFILES}
 ${OBJECTDIR}/main.o: main.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.cpp
+	$(COMPILE.cc) -g `pkg-config --cflags opencv`    -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.cpp
+
+${OBJECTDIR}/BrightnessControl.o: BrightnessControl.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -g `pkg-config --cflags opencv`    -MMD -MP -MF $@.d -o ${OBJECTDIR}/BrightnessControl.o BrightnessControl.cpp
 
 # Subprojects
 .build-subprojects:
