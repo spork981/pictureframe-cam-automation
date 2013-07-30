@@ -17,7 +17,7 @@ int setupWebcam() {
     width = 320;
     height = 240;
 
-    imgcapture.open(0);
+    imgcapture.open(-1);
     if (!imgcapture.isOpened()) {
         std::cerr << "No imaging device!" << std::endl;
         return -1;
@@ -33,6 +33,7 @@ int setupWebcam() {
 int main(int argc, char** argv) {
     cvInitSystem(argc, argv);
     setupWebcam();
+    if(!bc.setupBrightnessControl()) return 1;
     
     cv::namedWindow("Output", CV_WINDOW_AUTOSIZE); // debug
     
@@ -51,11 +52,14 @@ int main(int argc, char** argv) {
         
         int level = bc.getBrightnessFromImage(gray);
         
-        std::cout << "level: " << level << std::endl;
+        bc.setBrightness(level);
         
         // debug: display image
         cv::imshow("Output", gray);
         if(cvWaitKey(100) >= 0) break;
+        
+        // only need to run once every two seconds
+        sleep(2);
     }
     
     cvDestroyWindow("Output"); 
